@@ -1,0 +1,58 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: zdp-mongo
+    restart: always
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - zdp-network
+
+  # BLUE slot — currently the LIVE version
+  backend-blue:
+    build: ./backend
+    container_name: backend-blue
+    restart: always
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/zerodowntimedb
+      - PORT=3000
+      - VERSION=blue
+    depends_on:
+      - mongo
+    networks:
+      - zdp-network
+
+  # GREEN slot — standby / used for new deployments
+  backend-green:
+    build: ./backend
+    container_name: backend-green
+    restart: always
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/zerodowntimedb
+      - PORT=3000
+      - VERSION=green
+    depends_on:
+      - mongo
+    networks:
+      - zdp-network
+
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    container_name: zdp-nginx
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend-blue
+      - backend-green
+    networks:
+      - zdp-network
+
+volumes:
+  mongo_data:
+
+networks:
+  zdp-network:
+    driver: bridge

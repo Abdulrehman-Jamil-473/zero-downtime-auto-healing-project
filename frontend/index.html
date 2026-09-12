@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zero-Downtime Platform</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Zero-Downtime Platform</h1>
+    <p class="subtitle">Multi-Tier Application &mdash; Item Manager Demo</p>
+
+    <form id="itemForm">
+      <input type="text" id="itemName" placeholder="Enter item name" required>
+      <button type="submit">Add Item</button>
+    </form>
+
+    <ul id="itemList"></ul>
+
+    <div class="status">
+      Backend status: <span id="statusText">checking...</span>
+      <span id="versionBadge" class="version-badge"></span>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
